@@ -1,11 +1,12 @@
 package com.pranay.notesapi.service;
 
-import com.pranay.notesapi.model.Note;
-import com.pranay.notesapi.repository.NoteRepository;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.pranay.notesapi.model.Note;
+import com.pranay.notesapi.repository.NoteRepository;
 
 @Service
 public class NoteService {
@@ -43,5 +44,9 @@ public class NoteService {
 
         noteRepository.deleteById(id);
         return true;
+    }
+
+    public List<Note> searchNotesByTitle(String title) {
+        return noteRepository.findByTitleContainingIgnoreCase(title);
     }
 }

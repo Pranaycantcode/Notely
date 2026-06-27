@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pranay.notesapi.model.Note;
@@ -32,6 +33,11 @@ public class NoteController {
         return noteService.getAllNotes();
     }
 
+    @GetMapping("/search")
+public List<Note> searchNotes(@RequestParam String title) {
+    return noteService.searchNotesByTitle(title);
+}
+
     @GetMapping("/{id}")
     public ResponseEntity<Note> getNoteById(@PathVariable Long id) {
         return noteService.getNoteById(id)
@@ -45,14 +51,14 @@ public class NoteController {
     }
 
     @PutMapping("/{id}")
-public ResponseEntity<Note> updateNote(
-        @PathVariable Long id,
-        @Valid @RequestBody Note updatedNote
-) {
-    return noteService.updateNote(id, updatedNote)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
-}
+    public ResponseEntity<Note> updateNote(
+            @PathVariable Long id,
+            @Valid @RequestBody Note updatedNote
+    ) {
+        return noteService.updateNote(id, updatedNote)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteNote(@PathVariable Long id) {
