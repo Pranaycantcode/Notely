@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pranay.notesapi.model.Note;
+import com.pranay.notesapi.dto.NoteRequest;
+import com.pranay.notesapi.dto.NoteResponse;
 import com.pranay.notesapi.service.NoteService;
 
 import jakarta.validation.Valid;
@@ -29,33 +30,33 @@ public class NoteController {
     }
 
     @GetMapping
-    public List<Note> getAllNotes() {
+    public List<NoteResponse> getAllNotes() {
         return noteService.getAllNotes();
     }
 
     @GetMapping("/search")
-public List<Note> searchNotes(@RequestParam String title) {
-    return noteService.searchNotesByTitle(title);
-}
+    public List<NoteResponse> searchNotes(@RequestParam String title) {
+        return noteService.searchNotesByTitle(title);
+    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Note> getNoteById(@PathVariable Long id) {
+    public ResponseEntity<NoteResponse> getNoteById(@PathVariable Long id) {
         return noteService.getNoteById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Note createNote(@Valid @RequestBody Note note) {
-        return noteService.createNote(note);
+    public NoteResponse createNote(@Valid @RequestBody NoteRequest request) {
+        return noteService.createNote(request);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Note> updateNote(
+    public ResponseEntity<NoteResponse> updateNote(
             @PathVariable Long id,
-            @Valid @RequestBody Note updatedNote
+            @Valid @RequestBody NoteRequest request
     ) {
-        return noteService.updateNote(id, updatedNote)
+        return noteService.updateNote(id, request)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

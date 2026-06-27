@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.pranay.notesapi.dto.NoteRequest;
+import com.pranay.notesapi.dto.NoteResponse;
 import com.pranay.notesapi.model.Note;
 import com.pranay.notesapi.repository.NoteRepository;
 
@@ -17,23 +19,32 @@ public class NoteService {
         this.noteRepository = noteRepository;
     }
 
-    public List<Note> getAllNotes() {
-        return noteRepository.findAll();
+    public List<NoteResponse> getAllNotes() {
+        return noteRepository.findAll()
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
     }
 
-    public Optional<Note> getNoteById(Long id) {
-        return noteRepository.findById(id);
+    public Optional<NoteResponse> getNoteById(Long id) {
+        return noteRepository.findById(id)
+                .map(this::mapToResponse);
     }
 
-    public Note createNote(Note note) {
-        return noteRepository.save(note);
+    public NoteResponse createNote(NoteRequest request) {
+        Note note = new Note(request.getTitle(), request.getContent());
+        Note savedNote = noteRepository.save(note);
+
+        return mapToResponse(savedNote);
     }
 
-    public Optional<Note> updateNote(Long id, Note updatedNote) {
+    public Optional<NoteResponse> updateNote(Long id, NoteRequest request) {
         return noteRepository.findById(id).map(existingNote -> {
-            existingNote.setTitle(updatedNote.getTitle());
-            existingNote.setContent(updatedNote.getContent());
-            return noteRepository.save(existingNote);
+            existingNote.setTitle(request.getTitle());
+            existingNote.setContent(request.getContent());
+
+            Note savedNote = noteRepository.save(existingNote);
+            return mapToResponse(savedNote);
         });
     }
 
@@ -46,7 +57,18 @@ public class NoteService {
         return true;
     }
 
-    public List<Note> searchNotesByTitle(String title) {
-        return noteRepository.findByTitleContainingIgnoreCase(title);
+    public List<NoteResponse> searchNotesByTitle(String title) {
+        return noteRepository.findByTitleContainingIgnoreCase(title)
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+    private NoteResponse mapToResponse(Note note) {
+        return new NoteResponse(
+                note.getId(),
+                note.getTitle(),
+                note.getContent()
+        );
     }
 }
