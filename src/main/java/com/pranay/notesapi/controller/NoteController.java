@@ -2,6 +2,8 @@ package com.pranay.notesapi.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +32,8 @@ public class NoteController {
     }
 
     @GetMapping
-    public List<NoteResponse> getAllNotes() {
-        return noteService.getAllNotes();
+    public Page<NoteResponse> getAllNotes(Pageable pageable) {
+        return noteService.getAllNotes(pageable);
     }
 
     @GetMapping("/search")

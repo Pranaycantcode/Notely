@@ -3,6 +3,8 @@ package com.pranay.notesapi.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.pranay.notesapi.dto.NoteRequest;
@@ -19,11 +21,9 @@ public class NoteService {
         this.noteRepository = noteRepository;
     }
 
-    public List<NoteResponse> getAllNotes() {
-        return noteRepository.findAll()
-                .stream()
-                .map(this::mapToResponse)
-                .toList();
+    public Page<NoteResponse> getAllNotes(Pageable pageable) {
+        return noteRepository.findAll(pageable)
+                .map(this::mapToResponse);
     }
 
     public Optional<NoteResponse> getNoteById(Long id) {
