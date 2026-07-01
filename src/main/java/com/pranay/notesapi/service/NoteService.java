@@ -68,7 +68,9 @@ public class NoteService {
         return new NoteResponse(
                 note.getId(),
                 note.getTitle(),
-                note.getContent()
+                note.getContent(),
+                note.getCreatedAt(),
+                note.getUpdatedAt()
         );
     }
 }
