@@ -5,16 +5,9 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import com.pranay.notesapi.dto.ApiResponse;
 import com.pranay.notesapi.dto.NoteRequest;
 import com.pranay.notesapi.dto.NoteResponse;
 import com.pranay.notesapi.service.NoteService;
@@ -32,49 +25,92 @@ public class NoteController {
     }
 
     @GetMapping
-    public Page<NoteResponse> getAllNotes(Pageable pageable) {
-        return noteService.getAllNotes(pageable);
+    public ApiResponse<Page<NoteResponse>> getAllNotes(Pageable pageable) {
+        Page<NoteResponse> notes = noteService.getAllNotes(pageable);
+
+        return new ApiResponse<>(
+                true,
+                "Notes fetched successfully",
+                notes
+        );
     }
 
     @GetMapping("/search")
-    public List<NoteResponse> searchNotes(@RequestParam String title) {
-        return noteService.searchNotesByTitle(title);
+    public ApiResponse<List<NoteResponse>> searchNotes(@RequestParam String title) {
+        List<NoteResponse> notes = noteService.searchNotesByTitle(title);
+
+        return new ApiResponse<>(
+                true,
+                "Notes search completed successfully",
+                notes
+        );
     }
 
     @GetMapping("/keyword-search")
-    public List<NoteResponse> searchNotesByKeyword(@RequestParam String keyword) {
-        return noteService.searchNotesByKeyword(keyword);
+    public ApiResponse<List<NoteResponse>> searchNotesByKeyword(@RequestParam String keyword) {
+        List<NoteResponse> notes = noteService.searchNotesByKeyword(keyword);
+
+        return new ApiResponse<>(
+                true,
+                "Keyword search completed successfully",
+                notes
+        );
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<NoteResponse> getNoteById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<NoteResponse>> getNoteById(@PathVariable Long id) {
         return noteService.getNoteById(id)
-                .map(ResponseEntity::ok)
+                .map(note -> ResponseEntity.ok(
+                        new ApiResponse<>(
+                                true,
+                                "Note fetched successfully",
+                                note
+                        )
+                ))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public NoteResponse createNote(@Valid @RequestBody NoteRequest request) {
-        return noteService.createNote(request);
+    public ApiResponse<NoteResponse> createNote(@Valid @RequestBody NoteRequest request) {
+        NoteResponse note = noteService.createNote(request);
+
+        return new ApiResponse<>(
+                true,
+                "Note created successfully",
+                note
+        );
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<NoteResponse> updateNote(
+    public ResponseEntity<ApiResponse<NoteResponse>> updateNote(
             @PathVariable Long id,
-            @Valid @RequestBody NoteRequest request) {
+            @Valid @RequestBody NoteRequest request
+    ) {
         return noteService.updateNote(id, request)
-                .map(ResponseEntity::ok)
+                .map(note -> ResponseEntity.ok(
+                        new ApiResponse<>(
+                                true,
+                                "Note updated successfully",
+                                note
+                        )
+                ))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteNote(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> deleteNote(@PathVariable Long id) {
         boolean deleted = noteService.deleteNote(id);
 
         if (!deleted) {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        true,
+                        "Note deleted successfully",
+                        null
+                )
+        );
     }
 }
