@@ -41,6 +41,11 @@ public class NoteController {
         return noteService.searchNotesByTitle(title);
     }
 
+    @GetMapping("/keyword-search")
+    public List<NoteResponse> searchNotesByKeyword(@RequestParam String keyword) {
+        return noteService.searchNotesByKeyword(keyword);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<NoteResponse> getNoteById(@PathVariable Long id) {
         return noteService.getNoteById(id)
@@ -56,8 +61,7 @@ public class NoteController {
     @PutMapping("/{id}")
     public ResponseEntity<NoteResponse> updateNote(
             @PathVariable Long id,
-            @Valid @RequestBody NoteRequest request
-    ) {
+            @Valid @RequestBody NoteRequest request) {
         return noteService.updateNote(id, request)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

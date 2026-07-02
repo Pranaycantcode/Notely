@@ -70,7 +70,13 @@ public class NoteService {
                 note.getTitle(),
                 note.getContent(),
                 note.getCreatedAt(),
-                note.getUpdatedAt()
-        );
+                note.getUpdatedAt());
+    }
+
+    public List<NoteResponse> searchNotesByKeyword(String keyword) {
+        return noteRepository.searchByTitleOrContent(keyword)
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
     }
 }
