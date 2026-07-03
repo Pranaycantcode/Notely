@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pranay.notesapi.dto.NoteRequest;
 import com.pranay.notesapi.dto.NoteResponse;
@@ -24,6 +25,7 @@ public class NoteService {
         this.noteRepository = noteRepository;
     }
 
+    @Transactional(readOnly = true)
     public Page<NoteResponse> getAllNotes(Pageable pageable) {
         logger.info(
                 "Fetching notes with page={}, size={}, sort={}",
@@ -42,6 +44,7 @@ public class NoteService {
         return notes;
     }
 
+    @Transactional(readOnly = true)
     public Optional<NoteResponse> getNoteById(Long id) {
         logger.info("Fetching note with id: {}", id);
 
@@ -55,6 +58,7 @@ public class NoteService {
         return note;
     }
 
+    @Transactional
     public NoteResponse createNote(NoteRequest request) {
         logger.info("Creating note with title: {}", request.getTitle());
 
@@ -66,6 +70,7 @@ public class NoteService {
         return mapToResponse(savedNote);
     }
 
+    @Transactional
     public Optional<NoteResponse> updateNote(Long id, NoteRequest request) {
         logger.info("Updating note with id: {}", id);
 
@@ -88,6 +93,7 @@ public class NoteService {
         return Optional.of(mapToResponse(savedNote));
     }
 
+    @Transactional
     public boolean deleteNote(Long id) {
         logger.info("Deleting note with id: {}", id);
 
@@ -102,6 +108,7 @@ public class NoteService {
         return true;
     }
 
+    @Transactional(readOnly = true)
     public List<NoteResponse> searchNotesByTitle(String title) {
         logger.info("Searching notes by title keyword={}", title);
 
@@ -124,6 +131,8 @@ public class NoteService {
                 note.getUpdatedAt());
     }
 
+    
+    @Transactional(readOnly = true)
     public List<NoteResponse> searchNotesByKeyword(String keyword) {
         logger.info("Searching notes by title/content keyword={}", keyword);
 

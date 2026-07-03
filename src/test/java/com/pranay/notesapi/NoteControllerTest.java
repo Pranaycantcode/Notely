@@ -3,6 +3,7 @@ package com.pranay.notesapi;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pranay.notesapi.dto.NoteRequest;
 import com.pranay.notesapi.service.NoteService;
+import com.pranay.notesapi.controller.NoteController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -12,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest
+@WebMvcTest(NoteController.class)
 class NoteControllerTest {
 
     @Autowired
@@ -28,7 +29,7 @@ class NoteControllerTest {
     void shouldRejectInvalidNoteRequest() throws Exception {
         NoteRequest request = new NoteRequest("", "");
 
-        mockMvc.perform(post("/notes")
+        mockMvc.perform(post("/api/v1/notes")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
