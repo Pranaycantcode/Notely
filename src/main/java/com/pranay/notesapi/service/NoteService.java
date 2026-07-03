@@ -25,12 +25,21 @@ public class NoteService {
     }
 
     public Page<NoteResponse> getAllNotes(Pageable pageable) {
-        logger.info("Fetching notes. Page: {}, Size: {}",
+        logger.info(
+                "Fetching notes with page={}, size={}, sort={}",
                 pageable.getPageNumber(),
-                pageable.getPageSize());
+                pageable.getPageSize(),
+                pageable.getSort());
 
-        return noteRepository.findAll(pageable)
+        Page<NoteResponse> notes = noteRepository.findAll(pageable)
                 .map(this::mapToResponse);
+
+        logger.info(
+                "Fetched {} notes out of total {} notes",
+                notes.getNumberOfElements(),
+                notes.getTotalElements());
+
+        return notes;
     }
 
     public Optional<NoteResponse> getNoteById(Long id) {
@@ -94,12 +103,16 @@ public class NoteService {
     }
 
     public List<NoteResponse> searchNotesByTitle(String title) {
-        logger.info("Searching notes by title: {}", title);
+        logger.info("Searching notes by title keyword={}", title);
 
-        return noteRepository.findByTitleContainingIgnoreCase(title)
+        List<NoteResponse> notes = noteRepository.findByTitleContainingIgnoreCase(title)
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
+
+        logger.info("Title search returned {} notes", notes.size());
+
+        return notes;
     }
 
     private NoteResponse mapToResponse(Note note) {
@@ -112,11 +125,15 @@ public class NoteService {
     }
 
     public List<NoteResponse> searchNotesByKeyword(String keyword) {
-        logger.info("Searching notes with keyword: {}", keyword);
+        logger.info("Searching notes by title/content keyword={}", keyword);
 
-        return noteRepository.searchByTitleOrContent(keyword)
+        List<NoteResponse> notes = noteRepository.searchByTitleOrContent(keyword)
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
+
+        logger.info("Keyword search returned {} notes", notes.size());
+
+        return notes;
     }
 }
