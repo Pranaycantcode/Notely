@@ -15,7 +15,7 @@ import com.pranay.notesapi.service.NoteService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/notes")
+@RequestMapping("/api/v1/notes")
 public class NoteController {
 
     private final NoteService noteService;
