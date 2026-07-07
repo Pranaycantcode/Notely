@@ -1,4 +1,4 @@
-# 📝 Notes API
+# Notes API
 
 A lightweight yet production-inspired REST API built with **Spring Boot** to understand the core concepts of backend development using the Spring ecosystem.
 
@@ -6,7 +6,7 @@ The project started as a simple CRUD application and was gradually enhanced with
 
 ---
 
-## 🚀 Tech Stack
+## Tech Stack
 
 - Java 17
 - Spring Boot
@@ -24,7 +24,7 @@ The project started as a simple CRUD application and was gradually enhanced with
 
 ---
 
-# ✨ Features
+# Features
 
 ## Notes Management
 
@@ -238,7 +238,7 @@ Continuous Integration workflow automatically:
 
 ---
 
-# 📁 Project Structure
+# Project Structure
 
 ```
 src
@@ -263,7 +263,7 @@ src
 
 ---
 
-# 🏗️ Architecture
+# Architecture
 
 ```
                HTTP Request
@@ -289,7 +289,7 @@ src
 
 ---
 
-# ▶️ Running Locally
+# Running Locally
 
 Clone the repository:
 
@@ -331,7 +331,7 @@ Windows:
 
 ---
 
-# 📚 Spring Concepts Covered
+# Spring Concepts Covered
 
 This project was built to understand the Spring ecosystem from the ground up.
 
@@ -363,7 +363,7 @@ Topics explored include:
 
 ---
 
-# 🎯 Purpose
+# Purpose
 
 This project was intentionally kept compact while progressively incorporating production-inspired backend practices.
 
@@ -371,7 +371,7 @@ Rather than focusing on application complexity, the emphasis was on understandin
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 **Pranay Mishra**
 
