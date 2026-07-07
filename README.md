@@ -317,7 +317,7 @@ Windows:
 
 ---
 
-# 🧪 Running Tests
+# Running Tests
 
 ```bash
 ./mvnw test
